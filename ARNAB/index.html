@@ -1,0 +1,206 @@
+<html>
+
+<head>
+    <style>
+        body{
+            background-color: #E5F7DE;
+        }
+        #container{
+            border: 2px solid black;
+            z-index: 1000;
+            background-color: #8FF1E2;
+        }
+        #details{
+            border: 1px solid black;
+            margin-top: 10px;
+            padding: 5px;
+        }
+        #detheader{
+            margin-top: 10px;
+        }
+        #buttons{
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div align = 'center'>
+        <h1>CHLOROPLETH MAP</h1>
+    </div>
+    <svg id="container" height="800" width="800" transform="translate(550,0)">
+        <g id="body" transform="translate(0,0)"></g>
+    </svg>
+    <div align="center" id ="detheader">
+        DETAILS (CLICK ON ANY COUNTRY TO VIEW ITS DETAILS BELOW)
+    </div>
+    <div id = "details" align='center'>
+    </div>
+    <div id = "buttons" align = 'center'>
+        <button type='button' onclick="showHDI2011()">HDI 2011</button>
+        <button type='button' onclick="showHDI2012()">HDI 2012</button>
+        <button type='button' onclick="showHDI2013()">HDI 2013</button>
+        <button type='button' onclick="showHDI2014()">HDI 2014</button>
+        <button type='button' onclick="showHDI2015()">HDI 2015</button>
+        <button type='button' onclick="showHDIrank2011()">HDI Rank 2011</button>
+        <button type='button' onclick="showHDIrank2012()">HDI Rank 2012</button>
+        <button type='button' onclick="showHDIrank2013()">HDI Rank 2013</button>
+        <button type='button' onclick="showHDIrank2014()">HDI Rank 2014</button>
+        <button type='button' onclick="showHDIrank2015()">HDI Rank 2015</button>
+    </div>
+
+</body>
+<script src = "d3.js"></script>
+<script>
+    let body = d3.select("#body")
+    let container = d3.select("#container")
+
+    var i;
+    var prop;
+
+    function showHDI2011(){
+        body.selectAll("path").remove()
+        i = 1;
+        prop = "Human Developement Index for 2011";
+
+        Promise.all([
+            d3.csv("dataset.csv"),
+            d3.json("countries.geo.json"),
+            d3.json("human1.json"),
+            d3.json("humanindia1.json"),
+            d3.json("humanindia2.json"),
+            d3.json("humanindia3.json")
+        ]).then(showData)
+    }
+
+    function showHDI2012(){
+        body.selectAll("path").remove()
+        i = 2;
+        prop = "Human Developement Index for 2012";
+        Promise.all([
+            d3.csv("dataset.csv"),
+            d3.json("countries.geo.json"),
+            d3.json("human1.json"),
+            d3.json("humanindia1.json"),
+            d3.json("humanindia2.json"),
+            d3.json("humanindia3.json")
+        ]).then(showData)
+    }
+
+    function showHDI2013(){
+        body.selectAll("path").remove()
+        i = 3;
+        prop = "Human Developement Index for 2013";
+        Promise.all([
+            d3.csv("dataset.csv"),
+            d3.json("countries.geo.json"),
+            d3.json("human1.json"),
+            d3.json("humanindia1.json"),
+            d3.json("humanindia2.json"),
+            d3.json("humanindia3.json")
+        ]).then(showData)
+    }
+
+    function showHDI2014(){
+        body.selectAll("path").remove()
+        i = 4;
+        prop = "Human Developement Index for 2014";
+        Promise.all([
+            d3.csv("dataset.csv"),
+            d3.json("countries.geo.json"),
+            d3.json("human1.json"),
+            d3.json("humanindia1.json"),
+            d3.json("humanindia2.json"),
+            d3.json("humanindia3.json")
+        ]).then(showData)
+    }
+
+    function showHDI2015(){
+        body.selectAll("path").remove()
+        prop = "Human Developement Index for 2015";
+        i = 5;
+        Promise.all([
+            d3.csv("dataset.csv"),
+            d3.json("countries.geo.json"),
+            d3.json("human1.json"),
+            d3.json("humanindia1.json"),
+            d3.json("humanindia2.json"),
+            d3.json("humanindia3.json")
+        ]).then(showData)
+    }
+
+    function showHDIrank2011(){
+        body.selectAll("path").remove()
+        i = 6;
+        prop = "Human Developement Index Rank for 2011";
+        Promise.all([
+            d3.csv("dataset.csv"),
+            d3.json("countries.geo.json"),
+            d3.json("human1.json"),
+            d3.json("humanindia1.json"),
+            d3.json("humanindia2.json"),
+            d3.json("humanindia3.json")
+        ]).then(showData)
+    }
+
+    function showData(datasources) {
+        let mapInfo = datasources[1]
+        let data = datasources[2]
+        
+        // console.log(data.fields)
+
+        let dataIndex = {};
+        for (let c of data.data) {
+            // console.log(c);
+            let country = c[0]
+            dataIndex[country] = +c[i];
+        }
+
+        console.log(dataIndex);
+
+        mapInfo.features = mapInfo.features.map(d => {
+            let country = d.properties.name;
+            let magnitude = dataIndex[country];
+            d.properties.Magnitude = magnitude;
+            return d;
+        })
+
+        let maxEarthquake = d3.max(mapInfo.features, 
+            d => d.properties.Magnitude);
+
+        let cScale = d3.scalePow()
+            .exponent(3)
+            .domain([0, maxEarthquake])
+            .range(['#38220F','#EDA05A'])
+            // .range(["white","red"])
+        
+        let bodyHeight = 800
+        let bodyWidth = 800
+
+        var projection = 
+            d3.geoMercator()
+                .scale(90)
+                .translate([400,400])
+
+
+        var path = d3.geoPath()
+            .projection(projection);
+
+        body.selectAll("path").data(mapInfo.features)
+            .enter().append("path")
+            .attr("d", d => path(d))
+            .attr("stroke", "black")
+            .attr("fill", 
+                d => d.properties.Magnitude ?
+                cScale(d.properties.Magnitude) :
+                "white")
+            .on("click", d => {
+                d3.select("#details").html("Country: "+ d.properties.name + "<br>" + prop + ": " + d.properties.Magnitude)
+                // var mouse = d3.mouse(this);
+            })
+    }
+
+
+</script>
+
+</html>
