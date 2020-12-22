@@ -61,11 +61,6 @@
         <button type='button button3' onclick="showHDI2013()">HDI 2013</button>
         <button type='button button4' onclick="showHDI2014()">HDI 2014</button>
         <button type='button button5' onclick="showHDI2015()">HDI 2015</button>
-        <button type='button button6' onclick="showHDIrank2011()">HDI Rank 2011</button>
-        <button type='button button7' onclick="showHDIrank2012()">HDI Rank 2012</button>
-        <button type='button button8' onclick="showHDIrank2013()">HDI Rank 2013</button>
-        <button type='button button9' onclick="showHDIrank2014()">HDI Rank 2014</button>
-        <button type='button button10' onclick="showHDIrank2015()">HDI Rank 2015</button>
     </div>
 
     <svg id="container" height="800" width="800" transform="translate(550,20)">
@@ -151,20 +146,6 @@
         body.selectAll("path").remove()
         prop = "Human Developement Index for 2015";
         i = 5;
-        Promise.all([
-            d3.csv("dataset.csv"),
-            d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
-        ]).then(showData)
-    }
-
-    function showHDIrank2011(){
-        body.selectAll("path").remove()
-        i = 6;
-        prop = "Human Developement Index Rank for 2011";
         Promise.all([
             d3.csv("dataset.csv"),
             d3.json("countries.geo.json"),
