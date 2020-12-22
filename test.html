@@ -24,12 +24,17 @@
         let bodyHeight = 200
         let bodyWidth = 400
 
-        data = data.map(d => ({
+        // console.log(data);
+
+        data = data.map(d => ({            
             date: new Date(d.Year, 31, 12),
             HDI_India: d.HDI_India,
-            HDI_World: d.HDI_World
+            HDI_World: (d["Human Development Index - World"]?d["Human Development Index - World"]:0)
         }))
         
+
+        console.log(data);
+
         let yScale = d3.scaleLinear()
             .range([bodyHeight, 0])
             .domain([0, 1]);
@@ -37,8 +42,12 @@
         body.append("g")
             .call(d3.axisLeft(yScale));
 
+        var minDate = new Date(1975,0,1)
+        var max = d3.max(data, d => d.date)
+
+        console.log(minDate)
         let xScale = d3.scaleTime()
-            .domain(d3.extent(data, d => d.date))
+            .domain([minDate,max])
             .range([0, bodyWidth]);
 
         body.append("g")
@@ -53,8 +62,8 @@
 
         let worldline = d3.line()
             .x(d => xScale(d.date))
-            .y(d => yScale(d.HDI_World))
-            .defined(d => !!d.HDI_World);
+            .y(d => yScale(+d.HDI_World))
+            .defined(d => !!(+d.HDI_World));
 
         body.append("path")
             .datum(data)
@@ -64,7 +73,7 @@
         body.append("path")
             .datum(data)
             .attr("d", indialine)
-            .attr("class", "line");
+            .attr("class", "line")
 
     }
 
