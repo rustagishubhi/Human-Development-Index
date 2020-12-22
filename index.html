@@ -4,67 +4,47 @@
 	<title>Human Development Index</title>
 </head>
 <body>
-
+    <svg />
 </body>
-<script type="text/javascript">
-	let body = d3.select("#body")
-    
-    Promise.all([
-        d3.csv("dataset.csv"), //earthquake data
-        d3.json("countries.geo.json")
-    ]).then(showData)
+<script src="./d3.js"></script>
+<script>
+    d3.csv("data_indiaVworld.csv").then(showData)
 
+    function showData(sample) {
+        const margin = 60;
+        const width = 1000 - 2 * margin;
+        const height = 600 - 2 * margin;
 
-    function showData(datasources) {
-        let mapInfo = datasources[1]
-        let data = datasources[0]
-        
+        const svg = d3.select('svg');
 
-        let dataIndex = {};
-        for (let c of data) {
-            let country = c.Country
-            dataIndex[country] = +c.Magnitude;
-        }
+        const chart = svg.append('g')
+            .attr('transform', `translate(${margin}, ${margin})`);
 
-        mapInfo.features = mapInfo.features.map(d => {
-            let country = d.properties.name;
-            let magnitude = dataIndex[country];
-            d.properties.Magnitude = magnitude;
-            return d;
-        })
+        const yScale = d3.scaleLinear()
+            .range([height, 0])
+            .domain([-10, 1000]);
 
-        let maxEarthquake = d3.max(mapInfo.features, 
-            d => d.properties.Magnitude);
+        chart.append('g')
+            .call(d3.axisLeft(yScale));
 
-        let medianMagnitude = d3.median(mapInfo.features, 
-            d => d.properties.Magnitude);
-        let cScale = d3.scaleLinear()
-            .domain([0, medianMagnitude, maxEarthquake])
-            .range(["white", "orange" ,"red"])
-        
-        let bodyHeight = 400
-        let bodyWidth = 400
+        const xScale = d3.scaleBand()
+            .range([0, width])
+            .domain(sample.map((s) => s.Year))
+            .padding(0.2)
 
-        var projection = 
-            d3.geoMercator()
-                .scale(80)
-                .translate([bodyWidth / 2, bodyHeight / 2])
+        chart.append('g')
+            // .attr('transform', `translate(0, ${height})`)
+            .call(d3.axisBottom(xScale));
 
-
-        var path = d3.geoPath()
-            .projection(projection);
-
-        body.selectAll("path").data(mapInfo.features)
-            .enter().append("path")
-            .attr("d", d => path(d))
-            .attr("stroke", "black")
-            .attr("fill", 
-                d => d.properties.Magnitude ?
-                cScale(d.properties.Magnitude) :
-                "white")
-
-
+        chart.selectAll()
+            .data(sample)
+            .enter()
+            .append('rect')
+            .style("fill", "blue")
+            .attr('x', (s) => xScale(s.Year))
+            .attr('y', (s) => yScale(s.HDI_India*1000))
+            .attr('height', (s) => height - yScale(s.HDI_India))
+            .attr('width', xScale.bandwidth())
     }
-
 </script>
 </html>
