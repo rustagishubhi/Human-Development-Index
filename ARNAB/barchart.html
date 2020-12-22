@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+    #my_dataiviz{
+      border: 2px solid black;
+    }
+  </style>
+</head>
+<body>
+  <div id="my_dataviz"></div>
+  <div id = "buttons" align = 'center'>
+        <button type='button' onclick="Argentina()">Argentina</button>
+        <button type='button' onclick="Australia()">Australia</button>
+        <button type='button' onclick="Brazil()">Brazil</button>
+        <button type='button' onclick="Canada()">Canada</button>
+        <button type='button' onclick="China()">China</button>
+        <br>
+        <button type='button' onclick="show()">SHOW COMPARISON!</button>
+  </div>
+  <div id = "details" align="center">
+  </div>
+</body>
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<script type="text/javascript">
+      
+      var countries = [];
+
+      function Argentina(){
+        if(countries.length == 3){
+          countries = []
+        }
+        countries.push("Argentina");
+      }
+
+      function Australia(){
+        if(countries.length == 3){
+          countries = []
+        }
+        countries.push("Australia");
+      }
+
+      function Brazil(){
+        if(countries.length == 3){
+          countries = []
+        }
+        countries.push("Brazil");
+      }
+
+      function Canada(){
+        if(countries.length == 3){
+          countries = []
+        }
+        countries.push("Canada");
+      }
+
+      function China(){
+        if(countries.length == 3){
+          countries = []
+        }
+        countries.push("China");
+      }
+
+      function show(){
+          d3.selectAll("svg").remove()
+          d3.csv("human1csvv.csv",showData)
+      }
+
+      function showData(datasources){
+              console.log(countries);
+
+              var margin = {top: 50, right: 10, bottom: 20, left: 750},
+              width = 1200 - margin.left - margin.right,
+              height = 500 - margin.top - margin.bottom;
+
+              var svg = d3.select("#my_dataviz")
+                .append("svg")
+                  .attr("width", width + margin.left + margin.right)
+                  .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                  .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+            console.log(datasources)
+
+            var groups = [countries[0],countries[1]]
+            var subgroups = ["LFPR_15_2009F","LFPR_15_2009M","LFPR_15_2011F","LFPR_15_2011M","LFPR_15_2012F","LFPR_15_2012M","LFPR_15_2014F","LFPR_15_2014M","LFPR_15_2015F","LFPR_15_2015M"]
+
+            var x = d3.scaleBand()
+                .domain(groups)
+                .range([0, width])
+                .padding([0.2])
+
+
+            svg.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .call(d3.axisBottom(x).tickSize(0));
+
+            // Add Y axis
+            var y = d3.scaleLinear()
+              .domain([0, 100])
+              .range([ height, 0 ]);
+
+
+            svg.append("g")
+              .call(d3.axisLeft(y));
+
+            // Another scale for subgroup position?
+            var xSubgroup = d3.scaleBand()
+              .domain(subgroups)
+              .range([0, x.bandwidth()])
+              .padding([0.5])
+
+            // color palette = one color per subgroup
+            var color = d3.scaleOrdinal()
+              .domain(subgroups)
+              .range(['#EC7A7C','#C97496','#9476A1','#587697','#23707B','#166556','#2B5634','#3A451B','#403410','#3E2310'])
+
+            // Show the bars
+            svg.append("g")
+              .selectAll("g")
+              .data(datasources)
+              .enter()
+              .append("g")
+                .attr("transform", function(d) {return "translate(" + x(d.Country) + ",0)"; })
+              .selectAll("rect")
+              .data(function(d) { return subgroups.map(function(key) { return {key: key, value: d[key]}; }); })
+              .enter().append("rect")
+                .attr("x", function(d) { return xSubgroup(d.key); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("width", xSubgroup.bandwidth())
+                .attr("height", function(d) { return height - y(d.value); })
+                .attr("fill", function(d) { return color(d.key); })
+              .on("mouseover",d => {
+                d3.select("#details").html("Country: "+ d.key + ": " + d.value)})
+        }
+
+</script>
+</html>

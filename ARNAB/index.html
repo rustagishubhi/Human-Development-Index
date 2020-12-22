@@ -12,41 +12,69 @@
         }
         #details{
             border: 1px solid black;
-            margin-top: 10px;
+            margin-top: 30px;
             padding: 5px;
+            align-content: center;
+            color: #dee1c9;
+            background-color: #ff006e;
+            font-size: 20px;
         }
         #detheader{
-            margin-top: 10px;
+            margin-top: 40px;
+            font-size: 25px;
         }
         #buttons{
             margin-top: 10px;
+        }
+        .button{
+         transform: translate(840px, 0px);
+          border: none;
+          color: black
+          background-color: yellow;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+
+        .button1{
+            width: 250px;
+            border: 2px solid black;    
         }
     </style>
 </head>
 
 <body>
+    <div>
+        <button class = "button button1" onclick="Home()">HOME</button>
+    </div>
     <div align = 'center'>
         <h1>CHLOROPLETH MAP</h1>
     </div>
-    <svg id="container" height="800" width="800" transform="translate(550,0)">
+
+    <div id = "buttons" align = 'center'>
+        <button type='button button1' onclick="showHDI2011()">HDI 2011</button>
+        <button type='button button2' onclick="showHDI2012()">HDI 2012</button>
+        <button type='button button3' onclick="showHDI2013()">HDI 2013</button>
+        <button type='button button4' onclick="showHDI2014()">HDI 2014</button>
+        <button type='button button5' onclick="showHDI2015()">HDI 2015</button>
+        <button type='button button6' onclick="showHDIrank2011()">HDI Rank 2011</button>
+        <button type='button button7' onclick="showHDIrank2012()">HDI Rank 2012</button>
+        <button type='button button8' onclick="showHDIrank2013()">HDI Rank 2013</button>
+        <button type='button button9' onclick="showHDIrank2014()">HDI Rank 2014</button>
+        <button type='button button10' onclick="showHDIrank2015()">HDI Rank 2015</button>
+    </div>
+
+    <svg id="container" height="800" width="800" transform="translate(550,20)">
         <g id="body" transform="translate(0,0)"></g>
     </svg>
     <div align="center" id ="detheader">
-        DETAILS (CLICK ON ANY COUNTRY TO VIEW ITS DETAILS BELOW)
+        DETAILS (HOVER ABOVE ANY COUNTRY TO VIEW ITS DETAILS BELOW)
     </div>
     <div id = "details" align='center'>
-    </div>
-    <div id = "buttons" align = 'center'>
-        <button type='button' onclick="showHDI2011()">HDI 2011</button>
-        <button type='button' onclick="showHDI2012()">HDI 2012</button>
-        <button type='button' onclick="showHDI2013()">HDI 2013</button>
-        <button type='button' onclick="showHDI2014()">HDI 2014</button>
-        <button type='button' onclick="showHDI2015()">HDI 2015</button>
-        <button type='button' onclick="showHDIrank2011()">HDI Rank 2011</button>
-        <button type='button' onclick="showHDIrank2012()">HDI Rank 2012</button>
-        <button type='button' onclick="showHDIrank2013()">HDI Rank 2013</button>
-        <button type='button' onclick="showHDIrank2014()">HDI Rank 2014</button>
-        <button type='button' onclick="showHDIrank2015()">HDI Rank 2015</button>
     </div>
 
 </body>
@@ -57,6 +85,10 @@
 
     var i;
     var prop;
+
+    function Home(){
+        window.open('front.html',"_self")
+    }
 
     function showHDI2011(){
         body.selectAll("path").remove()
@@ -161,15 +193,17 @@
         mapInfo.features = mapInfo.features.map(d => {
             let country = d.properties.name;
             let magnitude = dataIndex[country];
-            d.properties.Magnitude = magnitude;
+            d.properties.Magnitude = magnitude*100;
             return d;
         })
 
         let maxEarthquake = d3.max(mapInfo.features, 
             d => d.properties.Magnitude);
 
+        console.log(maxEarthquake);
+
         let cScale = d3.scalePow()
-            .exponent(3)
+            .exponent(2)
             .domain([0, maxEarthquake])
             .range(['#38220F','#EDA05A'])
             // .range(["white","red"])
@@ -194,7 +228,7 @@
                 d => d.properties.Magnitude ?
                 cScale(d.properties.Magnitude) :
                 "white")
-            .on("click", d => {
+            .on("mouseover", d => {
                 d3.select("#details").html("Country: "+ d.properties.name + "<br>" + prop + ": " + d.properties.Magnitude)
                 // var mouse = d3.mouse(this);
             })
