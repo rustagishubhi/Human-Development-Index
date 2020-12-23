@@ -2,13 +2,28 @@
 
 <head>
     <style>
+        body{
+            background-color: #E0EFB2;
+        }
         .line {
             fill: none;
-            stroke: blue
         }
 
+        #container{
+            border: 2px solid black;
+            z-index: 1000;
+            transform: translate(400px,0px);
+            margin-top: 20px;
+        }
+
+/*        #detailhead{
+            transform: translate(-50px,50px);
+            font-family: sans-serif;
+            font-size: 20px;
+        }*/
+
         .dropbtn {
-          background-color: #4CAF50;
+          background-color: #514863;
           color: white;
           padding: 16px;
           font-size: 16px;
@@ -17,8 +32,8 @@
 
         /* The container <div> - needed to position the dropdown content */
         .dropdown {
-          margin-left: 850px;
-          margin-top: -200px;
+          margin-left: 800px;
+          margin-top: 100px;
           /*position: relative;*/
           /*display: inline-block;*/
         }
@@ -48,56 +63,116 @@
         .dropdown:hover .dropdown-content {display: block;}
 
         /* Change the background color of the dropdown button when the dropdown content is shown */
-        .dropdown:hover .dropbtn {background-color: #3e8e41;}
+        .dropdown:hover .dropbtn {background-color: #514890;}
 
+        #legend{
+            transform: translate(1200px,-500px);
+            border: 1px solid black;
+            width: 300px;
+            height: 400px;
+        }
+
+        #refreshbut{
+            transform: translate(775px,60px);
+        }
     </style>
 </head>
 <body>
-    <svg id="container" height="800" width="1500">
-        <g id="body" transform="translate(600,50)"></g>
-        <g id="xAxis"></g>
-        <g id="yAxis"></g>
-    </svg>
+    <!-- <p align="center" id = "detailhead">
+        HOVER ON THE BUTTON BELOW AND CLICK ANY COUNTRY TO VIEW RANKS
+    </p> -->
 
-    <div class="dropdown" >
-      <button class="dropbtn">Dropdown</button>
+    <!-- <br> -->
+    <div align="center">
+        <p>
+            <u style="font-size: 30px">STEPS:</u>
+        </p>
+    </div>
+
+    <div align="center">
+        <li style="font-size: 20px"><b>FOR NEW VISUALIZATION, REFRESH PAGE</b></li>
+        <li style="font-size: 20px">CHOOSE THE COUNTRIES FROM THE DROP DOWN, FOR SIMULTANEOUS RANK COMPARISON</li>
+    </div>
+
+    <button class = "dropbtn" id = "refreshbut" onclick="Refresh()">REFRESH VISUALIZATION</button>
+     <div class="dropdown" >
+      <button class="dropbtn">CHOOSE COUNTRY</button>
       <div class="dropdown-content">
         <a href="#" onclick="Argentina()">Argentina</a>
         <a href="#" onclick="Australia()">Australia</a>
         <a href="#" onclick="Brazil()">Brazil</a>
       </div>
     </div>
+
+    <svg id="container" height="500" width="700">
+        <g id="body" transform="translate(110,50)"></g>
+        <g id="xAxis"></g>
+        <g id="yAxis"></g>
+    </svg>
+
+    <div id = "legend">
+        <p align="center" style="font-family: cursive;">COLOR LEGEND</p>
+        <ul id = "itemlist">
+    </ul>
+    </div>>
 </body>
 <script src="d3.js"></script>
 <script>
     let body = d3.select("#body")
-
+    let container = d3.select("#container")
     var countryind;
+    var country;
+    var countrylist = [];
+    var strokecolor;
+    let itemlist = d3.select("#itemlist")
+
+    function Refresh(){
+        window.location.reload();
+    }
+
+    function count(){
+        return itemlist.selectAll("li").size()
+    }
 
     function Argentina(){
-        body.selectAll("path").remove()
-        body.selectAll("circle").remove()
         countryind = 0;
-        d3.csv("human1csvv.csv").then(showData)
+        country = "Argentina";
+        strokecolor = "blue";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").text(strokecolor + ": "  + country)
+            d3.csv("human1csvv.csv").then(showData)
+        }
     }
 
     function Australia(){
-        body.selectAll("path").remove()
-        body.selectAll("circle").remove()
         countryind = 1;
-        d3.csv("human1csvv.csv").then(showData)
+        country = "Australia";
+        strokecolor = "red";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").text(strokecolor + ": "  + country)
+            d3.csv("human1csvv.csv").then(showData)
+        }
     }
 
     function Brazil(){
-        body.selectAll("path").remove()
-        body.selectAll("circle").remove()
         countryind = 2;
-        d3.csv("human1csvv.csv").then(showData)
+        country = "Brazil";
+        strokecolor = "orange";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").text(strokecolor + ": "  + country)
+            d3.csv("human1csvv.csv").then(showData)
+        }
     }
 
     function showData(data) {
-        let bodyHeight = 400
-        let bodyWidth = 600
+        let bodyHeight = 300
+        let bodyWidth = 500
 
         console.log(data);
 
@@ -147,6 +222,8 @@
             .datum(arr1)
             .attr("d", rankline)
             .attr("class", "line")
+            .attr("stroke",strokecolor)
+            .attr("stroke-width","2px")
 
         body.selectAll("myCircles")
           .data(arr1)
@@ -169,6 +246,9 @@
             .attr("cx", function(d) { return xScale(d.Year) })
             .attr("cy", function(d) { return yScale(d.Rank) })
             .attr("r", 10)
+
+        container.append("text").text("Ranks").attr("text-anchor","middle").attr("font-size","20px").attr("transform","rotate(90,-110,160)").attr("fill","black")
+        container.append("text").text("Years").attr("text-anchor","middle").attr("font-size","20px").attr("transform","translate(400,400)").attr("fill","black")
 
     }
 
