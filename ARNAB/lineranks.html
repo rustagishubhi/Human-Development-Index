@@ -1,0 +1,178 @@
+<html>
+
+<head>
+    <style>
+        .line {
+            fill: none;
+            stroke: blue
+        }
+
+        .dropbtn {
+          background-color: #4CAF50;
+          color: white;
+          padding: 16px;
+          font-size: 16px;
+          border: none;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+          margin-left: 850px;
+          margin-top: -200px;
+          /*position: relative;*/
+          /*display: inline-block;*/
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #ddd;}
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {display: block;}
+
+        /* Change the background color of the dropdown button when the dropdown content is shown */
+        .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+    </style>
+</head>
+<body>
+    <svg id="container" height="800" width="1500">
+        <g id="body" transform="translate(600,50)"></g>
+        <g id="xAxis"></g>
+        <g id="yAxis"></g>
+    </svg>
+
+    <div class="dropdown" >
+      <button class="dropbtn">Dropdown</button>
+      <div class="dropdown-content">
+        <a href="#" onclick="Argentina()">Argentina</a>
+        <a href="#" onclick="Australia()">Australia</a>
+        <a href="#" onclick="Brazil()">Brazil</a>
+      </div>
+    </div>
+</body>
+<script src="d3.js"></script>
+<script>
+    let body = d3.select("#body")
+
+    var countryind;
+
+    function Argentina(){
+        body.selectAll("path").remove()
+        body.selectAll("circle").remove()
+        countryind = 0;
+        d3.csv("human1csvv.csv").then(showData)
+    }
+
+    function Australia(){
+        body.selectAll("path").remove()
+        body.selectAll("circle").remove()
+        countryind = 1;
+        d3.csv("human1csvv.csv").then(showData)
+    }
+
+    function Brazil(){
+        body.selectAll("path").remove()
+        body.selectAll("circle").remove()
+        countryind = 2;
+        d3.csv("human1csvv.csv").then(showData)
+    }
+
+    function showData(data) {
+        let bodyHeight = 400
+        let bodyWidth = 600
+
+        console.log(data);
+
+        arr1 = []
+        years = [2011,2012,2013,2014,2015]
+        cols = ['HDI_Rank_2011','HDI_Rank_2012','HDI_Rank_2013','HDI_Rank_2014','HDI_Rank_2015']
+        var i = 0;
+        for(var c in cols){
+            arr1.push({
+                Year : new Date(years[i],0,1),
+                Rank : +data[countryind][cols[c]]
+            })
+            i+=1
+        }
+        // data2 = data.map(d => ({            
+        //     Country: d.Country,
+        //     Rank: d['HDI_Rank_2011'],
+        // }))
+        
+
+        console.log(arr1);
+
+        let yScale = d3.scaleLinear()
+            .range([bodyHeight, 0])
+            .domain([0, 150]);
+
+        body.append("g")    
+            .call(d3.axisLeft(yScale));
+
+        var minDate = new Date(2010,0,1)
+        var maxDate = new Date(2016,11,31)
+
+        let xScale = d3.scaleTime()
+            .domain([minDate,maxDate])
+            .range([0, bodyWidth]);
+
+        body.append("g")
+            .attr("transform", "translate(0," + bodyHeight + ")")
+            .call(d3.axisBottom(xScale)
+                .tickFormat(d3.timeFormat("%Y")))
+
+        let rankline = d3.line()
+            .x(d => xScale(d.Year))
+            .y(d => yScale(d.Rank))
+
+        body.append("path")
+            .datum(arr1)
+            .attr("d", rankline)
+            .attr("class", "line")
+
+        body.selectAll("myCircles")
+          .data(arr1)
+          .enter()
+          .append("circle")
+            .attr("fill", "red")
+            .attr("stroke", "none")
+            .attr("cx", function(d) { return xScale(d.Year) })
+            .attr("cy", function(d) { return yScale(d.Rank) })
+            .attr("r", 3)
+
+        body.selectAll("outlines")
+          .data(arr1)
+          .enter()
+          .append("circle")
+            .attr("fill", "none")
+            .attr("border","1px")
+            .attr("stroke", "gray")
+            .attr("stroke-width","2px")
+            .attr("cx", function(d) { return xScale(d.Year) })
+            .attr("cy", function(d) { return yScale(d.Rank) })
+            .attr("r", 10)
+
+    }
+
+
+</script>
+
+</html>

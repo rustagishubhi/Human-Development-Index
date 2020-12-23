@@ -58,6 +58,7 @@
 	<h1 align="center">
 		BAR CHART COMPARING HUMAN DEVELOPMENT INDEX RANKS <br> OF SEVERAL COUNTRIES FOR CHOSEN YEAR
 	</h1>
+	<h3 align="center">*Note: Values do not vary much between years, hence graph values change only marginally</h3>
 
 	<div id = "buttons" align = 'center'>
         <button type='button' onclick="year2011()">HDI 2011</button>
@@ -160,10 +161,11 @@
         let yAxis = d3.axisLeft(scalePosition)
         d3.select("#yAxis")
             .attr("transform", "translate(150, 30)")
+            .style("font-size","13px")
             .call(yAxis)
 
-        container.append("text").text("Country Names").attr("text-anchor","middle").attr("font-size","20px").attr("transform","translate(10,300)").attr("transform","rotate(90,-120,150)")
-        container.append("text").text("Ranks").attr("text-anchor","middle").attr("font-size","20px").attr("transform","translate(400,570)")
+        container.append("text").text("Country Names").attr("text-anchor","middle").attr("font-size","20px").attr("transform","translate(10,300)").attr("transform","rotate(90,-120,130)").attr("fill","yellow")
+        container.append("text").text("Ranks").attr("text-anchor","middle").attr("font-size","20px").attr("transform","translate(400,570)").attr("fill","yellow")
 
         }
 

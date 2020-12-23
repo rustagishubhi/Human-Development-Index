@@ -44,6 +44,16 @@
             width: 250px;
             border: 2px solid black;    
         }
+
+        .legend {
+          display: table;
+          margin: 0 auto;
+          font-family: "Helvetica Neue", sans-serif;
+          font-size: 12px;
+          height: 35px;
+          width: 250px;
+        }
+
     </style>
 </head>
 
@@ -51,8 +61,13 @@
     <div>
         <button class = "button button1" onclick="Home()">HOME</button>
     </div>
+    <div id = "legend">
+        
+    </div>
     <div align = 'center'>
         <h1>CHLOROPLETH MAP</h1>
+        <p>The following map shows the plotting of the Human Development Index on the World Map. The values plotted are based on the power scale with exponent 4, to bring out the difference between respective countries.</p>
+        <h3>*Note: Values do not vary much between years, hence graph values change only marginally. Please click on any year, hover on any country and check box below for exact values.</h3>
     </div>
 
     <div id = "buttons" align = 'center'>
@@ -66,8 +81,22 @@
     <svg id="container" height="800" width="800" transform="translate(550,20)">
         <g id="body" transform="translate(0,0)"></g>
     </svg>
+
+    <svg id = "legend" height="150" width="400" transform="translate(230,-580)">
+        <text x = "0" y = "40" fill = "red">0 &emsp; 20&emsp;&nbsp;&nbsp;40&emsp;&nbsp;&nbsp;60&emsp;&nbsp;&nbsp;80&emsp;100</text>
+        <text x = 40 y = "70" style = "font-family: sans-serif;">H.D. Index Legend </text>
+      <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#38220F;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#EDA05A;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect id = "legendrect" height = 20 width = 200 fill = "url(#grad1)">
+      <!-- <ellipse cx="200" cy="70" rx="85" ry="55" fill="url(#grad1)" /> -->
+    </svg>
+
     <div align="center" id ="detheader">
-        DETAILS (HOVER ABOVE ANY COUNTRY TO VIEW ITS DETAILS BELOW)
+        <b>DETAILS (HOVER ABOVE ANY COUNTRY TO VIEW ITS DETAILS BELOW)<b>
     </div>
     <div id = "details" align='center'>
     </div>
@@ -184,11 +213,11 @@
         console.log(maxEarthquake);
 
         let cScale = d3.scalePow()
-            .exponent(2)
+            .exponent(4)
             .domain([0, maxEarthquake])
             .range(['#38220F','#EDA05A'])
             // .range(["white","red"])
-        
+
         let bodyHeight = 800
         let bodyWidth = 800
 
@@ -213,6 +242,27 @@
                 d3.select("#details").html("Country: "+ d.properties.name + "<br>" + prop + ": " + d.properties.Magnitude)
                 // var mouse = d3.mouse(this);
             })
+
+
+        // d3.select("#container")
+        //   .append("svg")
+        //   .attr("class", "legend");
+
+        // var legend = d3.legend
+        //   .color()
+        //   .shapeHeight(10)
+        //   .shapeWidth(50)
+        //   .shapePadding(0)
+        //   .labelOffset(5)
+        //   .labelFormat(d3.format("%"))
+        //   .orient("horizontal")
+        //   .labelAlign("start")
+        //   .scale(cScale);
+
+        // d3.select(".legend").call(legend);
+
+        // console.log(legend)
+
     }
 
 
