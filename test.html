@@ -39,7 +39,7 @@
             .range([bodyHeight, 0])
             .domain([0, 1]);
 
-        body.append("g")
+        body.append("g")    
             .call(d3.axisLeft(yScale));
 
         var minDate = new Date(1975,0,1)
