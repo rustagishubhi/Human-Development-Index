@@ -65,12 +65,36 @@
         /* Change the background color of the dropdown button when the dropdown content is shown */
         .dropdown:hover .dropbtn {background-color: #514890;}
 
-        #legend{
+        .legend{
             transform: translate(1200px,-500px);
-            border: 1px solid black;
+            /*border: 1px solid black;*/
             width: 300px;
-            height: 400px;
+            height: 700px;
+            list-style: none;
         }
+
+        .legend li{ float: left; margin-right: 10px; }
+        .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+        /* your colors */
+        .legend .Argentina { background-color: red; }
+        .legend .Australia { background-color: blue; }
+        .legend .Brazil { background-color: orange ; }
+        .legend .Canada { background-color: yellow; }
+        .legend .China { background-color: black; }
+        .legend .France { background-color: Brown; }
+        .legend .Germany { background-color: BlueViolet; }
+        .legend .India { background-color: CadetBlue; }
+        .legend .Indonesia { background-color: CornflowerBlue; }
+        .legend .Italy { background-color: Crimson; }
+        .legend .Japan { background-color: Cyan; }
+        .legend .Mexico { background-color: DarkBlue; }
+        .legend .Russia { background-color: DarkCyan; }
+        .legend .Saudi { background-color: DarkGreen; }
+        .legend .Africa { background-color: Fuchsia; }
+        .legend .Korea { background-color: HotPink; }
+        .legend .Turkey { background-color: Indigo; }
+        .legend .UK { background-color: LightBlue; }
+        .legend .US { background-color: Linen; }
 
         #ranks{
             text-align: center;
@@ -79,12 +103,33 @@
             border: 1px solid black;
             margin-bottom: 40px;
             margin-top: 10px;
+            margin-bottom: 10px;
             width: 300px;
             height: 25px;
         }
         #refreshbut{
             transform: translate(775px,60px);
         }
+
+        .button{
+         transform: translate(770px, 0px);
+          border: none;
+          color: black
+          background-color: yellow;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+
+        .button1{
+            width: 250px;
+            border: 2px solid black;    
+        }
+
     </style>
 </head>
 <body>
@@ -93,6 +138,10 @@
     </p> -->
 
     <!-- <br> -->
+    <div>
+        <button class = "button button1" onclick="Home()">HOME</button>
+    </div>
+
     <div align="center">
         <p>
             <u style="font-size: 30px">LINE CHART COMPARISON ACROSS 5 YEARS FOR VARIOUS COUNTRIES</u>
@@ -117,6 +166,22 @@
         <a href="#" onclick="Argentina()">Argentina</a>
         <a href="#" onclick="Australia()">Australia</a>
         <a href="#" onclick="Brazil()">Brazil</a>
+        <a href="#" onclick="Canada()">Canada</a>
+        <a href="#" onclick="China()">China</a>
+        <a href="#" onclick="France()">France</a>
+        <a href="#" onclick="Germany()">Germany</a>
+        <a href="#" onclick="India()">India</a>
+        <a href="#" onclick="Indonesia()">Indonesia</a>
+        <a href="#" onclick="Italy()">Italy</a>
+        <a href="#" onclick="Japan()">Japan</a>
+        <a href="#" onclick="Mexico()">Mexico</a>
+        <a href="#" onclick="RussianFederation()">Russian Federation</a>
+        <a href="#" onclick="SaudiArabia()">Saudi Arabia</a>
+        <a href="#" onclick="SouthAfrica()">South Africa</a>
+        <a href="#" onclick="RepublicOfKorea()">Republic of Korea</a>
+        <a href="#" onclick="Turkey()">Turkey</a>
+        <a href="#" onclick="UnitedKingdom()">United Kingdom</a>
+        <a href="#" onclick="UnitedStates()">United States of America</a>
       </div>
     </div>
 
@@ -132,10 +197,11 @@
     <div id = "ranks">
     </div>
 
-    <div id = "legend">
+    <div class = "legend">
         <p align="center" style="font-family: cursive;">COLOR LEGEND</p>
         <ul id = "itemlist">
-    </ul>
+        </ul>
+    </div>
 
 </body>
 <script src="d3.js"></script>
@@ -148,6 +214,9 @@
     var strokecolor;
     let itemlist = d3.select("#itemlist")
 
+    function Home(){
+      window.open('front.html',"_self")
+    }
     function Refresh(){
         window.location.reload();
     }
@@ -159,11 +228,12 @@
     function Argentina(){
         countryind = 0;
         country = "Argentina";
-        strokecolor = "blue";
+        strokecolor = "red";
         if(!countrylist.includes(country)){
             countrylist.push(country)
             let c = count() + 1
-            itemlist.append("li").text(strokecolor + ": "  + country)
+            itemlist.append("li").html("<span class = " + country + "></span>" + country);
+            itemlist.append("html").html("<br>")
             d3.csv("human1csvv.csv").then(showData)
         }
     }
@@ -171,11 +241,12 @@
     function Australia(){
         countryind = 1;
         country = "Australia";
-        strokecolor = "red";
+        strokecolor = "blue";
         if(!countrylist.includes(country)){
             countrylist.push(country)
             let c = count() + 1
-            itemlist.append("li").text(strokecolor + ": "  + country)
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
             d3.csv("human1csvv.csv").then(showData)
         }
     }
@@ -183,11 +254,220 @@
     function Brazil(){
         countryind = 2;
         country = "Brazil";
-        strokecolor = "orange";
+        strokecolor = "Orange";
         if(!countrylist.includes(country)){
             countrylist.push(country)
             let c = count() + 1
-            itemlist.append("li").text(strokecolor + ": "  + country)
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function Canada(){
+        countryind = 3;
+        country = "Canada";
+        strokecolor = "yellow";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function China(){
+        countryind = 4;
+        country = "China";
+        strokecolor = "black";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function France(){
+        countryind = 5;
+        country = "France";
+        strokecolor = "Brown";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function Germany(){
+        countryind = 6;
+        country = "Germany";
+        strokecolor = "BlueViolet";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function India(){
+        countryind = 7;
+        country = "India";
+        strokecolor = "CadetBlue";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function Indonesia(){
+        countryind = 8;
+        country = "Indonesia";
+        strokecolor = "CornflowerBlue";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function Italy(){
+        countryind = 9;
+        country = "Italy";
+        strokecolor = "Crimson";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function Japan(){
+        countryind = 10;
+        country = "Japan";
+        strokecolor = "Cyan";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function Mexico(){
+        countryind = 11;
+        country = "Mexico";
+        strokecolor = "DarkBlue";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function RussianFederation(){
+        countryind = 12;
+        country = "Russia";
+        strokecolor = "DarkCyan";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function SaudiArabia(){
+        countryind = 13;
+        country = "Saudi";
+        strokecolor = "DarkGreen";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function SouthAfrica(){
+        countryind = 14;
+        country = "Africa";
+        strokecolor = "Fuchsia";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function RepublicOfKorea(){
+        countryind = 15;
+        country = "Korea";
+        strokecolor = "HotPink";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function Turkey(){
+        countryind = 16;
+        country = "Turkey";
+        strokecolor = "Indigo";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function UnitedKingdom(){
+        countryind = 17;
+        country = "UK";
+        strokecolor = "LightBlue";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
+            d3.csv("human1csvv.csv").then(showData)
+        }
+    }
+
+    function UnitedStates(){
+        countryind = 18;
+        country = "US";
+        strokecolor = "Linen";
+        if(!countrylist.includes(country)){
+            countrylist.push(country)
+            let c = count() + 1
+            itemlist.append("li").html("<span class = " + country + "></span>" + country + "<br>");
+            itemlist.append("html").html("<br>")
             d3.csv("human1csvv.csv").then(showData)
         }
     }
@@ -268,7 +548,7 @@
             .attr("stroke-width","2px")
             .attr("cx", function(d) { return xScale(d.Year) })
             .attr("cy", function(d) { return yScale(d.Rank) })
-            .attr("r", 10)
+            .attr("r", 5)
             .on("mouseover", d => {
                 d3.select("#ranks").html("Rank of " + d.Country + " is : " + d.Rank)})
 
