@@ -1,0 +1,112 @@
+<html>
+
+<head>
+    <title>Human Development Index</title>
+<!--     <style type="text/css">
+        #my_dataiviz{
+          border: 2px solid black;
+        }
+    </style> -->
+</head>
+<body>
+    <!-- <div id="my_dataviz"> -->
+    <svg id="container" height="300" width="500">
+        <g id="body" transform="translate(50,50)"></g>
+        <g id="xAxis"></g>
+        <g id="yAxis"></g>
+    </svg>
+    <!-- </div> -->
+</body>
+<script src="d3.js"></script>
+<script>
+    let body = d3.select("#body")
+    d3.csv("data_indiaVworld.csv").then(showData)
+
+    function showData(data) {
+        let bodyHeight = 200
+        let bodyWidth = 400
+
+        // console.log(data);
+
+        data = data.map(d => ({            
+            date: new Date(d.Year, 0, 1),
+            HDI_India: d.HDI_India,
+            HDI_World: d.HDI_World!=="NA"?d.HDI_World:0
+        }))
+        
+
+        console.log(data);
+
+        let yScale = d3.scaleLinear()
+            .range([bodyHeight, 0])
+            .domain([0, 1]);
+
+        body.append("g")    
+            .call(d3.axisLeft(yScale));
+
+        var minDate = new Date(1978,0,1)
+        var maxDate = new Date(2015,0,1)
+
+        console.log(minDate)
+        let xScale = d3.scaleTime()
+            .domain([minDate,maxDate])
+            .range([0, bodyWidth]);
+
+        body.append("g")
+            .attr("transform", "translate(0," + bodyHeight + ")")
+            .call(d3.axisBottom(xScale)
+                .tickFormat(d3.timeFormat("%Y")))
+
+        let indialine = d3.line()
+            .x(d => xScale(d.date))
+            .y(d => yScale(d.HDI_India))
+            .defined(d => !!d.HDI_India);
+
+        console.log(data);
+        let worldline = d3.line()
+            .x(d => xScale(d.date))
+            .y(d => yScale(d.HDI_World))
+            .defined(d => !!d.HDI_World);
+
+        body.append("path")
+            .datum(data)
+            .attr("d", worldline)
+            .attr("class", "line")
+            .attr("stroke", "blue")
+            .attr("stroke-width", "2")
+            .attr("fill", "none");
+
+        body.append("path")
+            .datum(data)
+            .attr("d", indialine)
+            .attr("class", "line")
+            .attr("stroke", "red")
+            .attr("stroke-width", "2")
+            .attr("fill", "none");
+
+        body.selectAll("myCircles")
+          .data(data)
+          .enter()
+          .append("circle")
+            .attr("fill", function(d) { return d.HDI_India?"blue":"none" })
+            .attr("stroke", "none")
+            .attr("cx", function(d) { return xScale(d.date) })
+            .attr("cy", function(d) { return yScale(d.HDI_World) })
+            .attr("r", 3)
+
+        body.selectAll("myCircles")
+          .data(data)
+          .enter()
+          .append("circle")
+            .attr("fill", function(d) { return d.HDI_India?"red":"none" })
+            .attr("stroke", "none")
+            .attr("cx", function(d) { return xScale(d.date) })
+            .attr("cy", function(d) { return yScale(d.HDI_India) })
+            .attr("r", 3)
+
+    }
+
+
+</script>
+
+</html>
