@@ -72,6 +72,16 @@
             height: 400px;
         }
 
+        #ranks{
+            text-align: center;
+            transform: translate(1200px,-500px);
+            font-size: 20px;
+            border: 1px solid black;
+            margin-bottom: 40px;
+            margin-top: 10px;
+            width: 300px;
+            height: 25px;
+        }
         #refreshbut{
             transform: translate(775px,60px);
         }
@@ -83,6 +93,12 @@
     </p> -->
 
     <!-- <br> -->
+    <div align="center">
+        <p>
+            <u style="font-size: 30px">LINE CHART COMPARISON ACROSS 5 YEARS FOR VARIOUS COUNTRIES</u>
+        </p>
+    </div>
+
     <div align="center">
         <p>
             <u style="font-size: 30px">STEPS:</u>
@@ -110,11 +126,17 @@
         <g id="yAxis"></g>
     </svg>
 
+    <div align="center" style="transform: translate(430px,-500px);">
+      <b>HOVER OVER ANY POINT TO SEE RANK BELOW</b>
+    </div>
+    <div id = "ranks">
+    </div>
+
     <div id = "legend">
         <p align="center" style="font-family: cursive;">COLOR LEGEND</p>
         <ul id = "itemlist">
     </ul>
-    </div>>
+
 </body>
 <script src="d3.js"></script>
 <script>
@@ -182,6 +204,7 @@
         var i = 0;
         for(var c in cols){
             arr1.push({
+                Country : country,
                 Year : new Date(years[i],0,1),
                 Rank : +data[countryind][cols[c]]
             })
@@ -246,6 +269,8 @@
             .attr("cx", function(d) { return xScale(d.Year) })
             .attr("cy", function(d) { return yScale(d.Rank) })
             .attr("r", 10)
+            .on("mouseover", d => {
+                d3.select("#ranks").html("Rank of " + d.Country + " is : " + d.Rank)})
 
         container.append("text").text("Ranks").attr("text-anchor","middle").attr("font-size","20px").attr("transform","rotate(90,-110,160)").attr("fill","black")
         container.append("text").text("Years").attr("text-anchor","middle").attr("font-size","20px").attr("transform","translate(400,400)").attr("fill","black")
