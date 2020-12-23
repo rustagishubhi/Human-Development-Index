@@ -18,14 +18,15 @@
 		}
 		#bardet{
 			border: 2px solid black;
+			text-align: center;
 			padding: 5px;
 			margin-top: 40px;
 			margin-left: 700px;
 			margin-bottom: 20px;
 			width: 500px;
 			align-content: center;
-			color: #dee1c9;
-			background-color: #ff006e;
+			color: black;
+			background-color: none;
 		}
 
 		.button{
@@ -68,19 +69,19 @@
         <button type='button' onclick="year2015()">HDI 2015</button>
     </div>
 
-	<svg id="container" height="600" width="800" , style="border: solid 1px #000" transform = "translate(550,30)">
-        <g id="body" style="transform:translate(150px,30px)"></g>
-        <g id="yAxis"></g>
-        <g id="xAxis"></g>
-
-    </svg>
-
     <div id = "bardetheader" align="center">
     	<b>DETAILS (HOVER ABOVE ANY BAR AND FIND THE DETAILS BELOW)<b>
     </div>
     <div id = "bardet">
 
     </div>
+
+	<svg id="container" height="600" width="800" , style="border: solid 1px #000" transform = "translate(550,30)">
+        <g id="body" style="transform:translate(150px,30px)"></g>
+        <g id="yAxis"></g>
+        <g id="xAxis"></g>
+
+    </svg>
 </body>
 
 <script src = "d3.js"></script>
