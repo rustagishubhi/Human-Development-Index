@@ -120,12 +120,8 @@
         prop = "Human Developement Index for 2011";
 
         Promise.all([
-            d3.csv("dataset.csv"),
             d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
+            d3.json("human1.json")
         ]).then(showData)
     }
 
@@ -134,12 +130,8 @@
         i = 2;
         prop = "Human Developement Index for 2012";
         Promise.all([
-            d3.csv("dataset.csv"),
             d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
+            d3.json("human1.json")
         ]).then(showData)
     }
 
@@ -148,12 +140,8 @@
         i = 3;
         prop = "Human Developement Index for 2013";
         Promise.all([
-            d3.csv("dataset.csv"),
             d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
+            d3.json("human1.json")
         ]).then(showData)
     }
 
@@ -162,12 +150,8 @@
         i = 4;
         prop = "Human Developement Index for 2014";
         Promise.all([
-            d3.csv("dataset.csv"),
             d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
+            d3.json("human1.json")
         ]).then(showData)
     }
 
@@ -176,18 +160,14 @@
         prop = "Human Developement Index for 2015";
         i = 5;
         Promise.all([
-            d3.csv("dataset.csv"),
             d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
+            d3.json("human1.json")
         ]).then(showData)
     }
 
     function showData(datasources) {
-        let mapInfo = datasources[1]
-        let data = datasources[2]
+        let mapInfo = datasources[0]
+        let data = datasources[1]
         
         // console.log(data.fields)
 
