@@ -1,271 +1,151 @@
+
+<!DOCTYPE html>
 <html>
-
 <head>
-    <style>
-        body{
-            background-color: #E5F7DE;
-        }
-        #container{
-            border: 2px solid black;
-            z-index: 1000;
-            background-color: #8FF1E2;
-        }
-        #details{
-            border: 1px solid black;
-            margin-top: 30px;
-            padding: 5px;
-            align-content: center;
-            color: black;
-            background-color: none;
-            font-size: 20px;
-        }
-        #detheader{
-            margin-top: 40px;
-            font-size: 25px;
-        }
-        #buttons{
-            margin-top: 10px;
-        }
-        .button{
-         transform: translate(840px, 0px);
-          border: none;
-          color: black
-          background-color: yellow;
-          padding: 15px 32px;
-          text-align: center;
-          text-decoration: none;
-          display: inline-block;
-          font-size: 16px;
-          margin: 4px 2px;
-          cursor: pointer;
-        }
+	<title>Human Development Index</title>
+	<style type="text/css">
 
-        .button1{
-            width: 250px;
-            border: 2px solid black;    
-        }
+		.auth{
+			margin-top: 300px;
+			text-align: center;
+			transform: translate(0px,450px);
+		}
 
-        .legend {
-          display: table;
-          margin: 0 auto;
-          font-family: "Helvetica Neue", sans-serif;
-          font-size: 12px;
-          height: 35px;
-          width: 250px;
-        }
+		.auth span u{
+			font-family: cursive;  
+			font-size: 40px;
+		}
+		#authors{
+			transform: translate(0px,500px);
+			font-size: 20px;
+			font-family: "Lucida Handwriting"; 
+			margin-top: -20px;
+		}
 
-    </style>
+		.button{
+		 transform: translate(800px, 600px);
+		  border: none;
+		  color: white;
+		  background-color: green;
+		  padding: 15px 32px;
+		  text-align: center;
+		  text-decoration: none;
+		  display: inline-block;
+		  font-size: 16px;
+		  /*margin: 4px 2px;*/
+		  cursor: pointer;
+		}
+
+		.button1{
+			width: 350px;
+			margin-left: -550px;
+			margin-top: -300px;
+		}
+
+		.button2{
+			width: 350px;
+			margin-left: 0px;
+			margin-top: -300px;
+		}
+
+		*{
+			padding:0;
+			margin: 0;
+			font-family: sans-serif;
+		}
+
+		body{
+			background: #000;
+			background-image: url('image1.jpg');
+			opacity: 80%;
+		}
+
+		.container{
+			text-align: center;
+			position: absolute;
+			top: 20%;
+			left: 50%
+			transform: translate(-50%,-50%);
+			width: 100%;
+		}
+		.container span{
+			color: black;
+			text-transform: uppercase;
+			display: block;
+		}
+		.text1{
+			color: black;
+			font-size: 60px;
+			font-weight: 700;
+			letter-spacing: 8px;
+			margin-bottom: 20px;
+			position: relative;
+			animation: text 1s 1;
+		}
+
+		.text2{
+			font-size: 60px;
+			color: #6ab04c;	
+		}
+
+		@keyframes text{
+			0%{
+				color: white;
+				margin-bottom: 0px;
+			}
+			30%{
+				letter-spacing: 50px;
+				margin-bottom: 0px;
+			}
+			65%{
+				letter-spacing: 20px;
+				margin-bottom: 20px;
+			}
+			85%{
+				letter-spacing: 20px;
+				margin-bottom: 40px;
+			}
+			100%{
+				letter-spacing: 8px;
+				margin-bottom: 20px;
+			}
+		}
+	</style>
+	<script type="text/javascript">
+		function Page1(){
+			window.open('chloropleth.html',"_self");
+		}
+		function Page2(){
+			window.open('ranks.html',"_self");
+		}
+		function Page3(){
+			window.open('lineranks.html',"_self");
+		}
+		function Page4(){
+			window.open('indiaworldline.html',"_self");
+		}
+	</script>
 </head>
-
 <body>
-    <div>
-        <button class = "button button1" onclick="Home()">HOME</button>
-    </div>
-    <div id = "legend">
-        
-    </div>
-    <div align = 'center'>
-        <h1>CHLOROPLETH MAP</h1>
-        <p>The following map shows the plotting of the Human Development Index on the World Map. The values plotted are based on the power scale with exponent 4, to bring out the difference between respective countries.</p>
-        <h3>*Note: Values do not vary much between years, hence graph values change only marginally. Please click on any year, hover on any country and check box below for exact values.</h3>
-    </div>
+	<div class="container">
+		<span class = "text1"><b>INFORMATION VISUALIZATION PROJECT</b></span>
+		<span class = "text2">CASE STUDY: HUMAN DEVELOPMENT INDEX</span>
+	</div>
 
-    <div id = "buttons" align = 'center'>
-        <button type='button button1' onclick="showHDI2011()">HDI 2011</button>
-        <button type='button button2' onclick="showHDI2012()">HDI 2012</button>
-        <button type='button button3' onclick="showHDI2013()">HDI 2013</button>
-        <button type='button button4' onclick="showHDI2014()">HDI 2014</button>
-        <button type='button button5' onclick="showHDI2015()">HDI 2015</button>
-    </div>
+	<div>
+		<button class = "button button1" onclick="Page1()">SHOW HDI CHLOROPLETH MAP</button>
+		<button class = "button button2" onclick="Page2()">SHOW HDI RANKS (BAR CHART)</button>
+		<button class = "button button3" onclick="Page3()">SHOW HDI RANKS (LINE CHART)</button>
+		<button class = "button button4" onclick="Page4()">SHOW HDI India v/s World (LINE CHART)</button>
+	</div>
 
-    <div align="center" id ="detheader">
-        <b>DETAILS (HOVER ABOVE ANY COUNTRY TO VIEW ITS DETAILS BELOW)<b>
-    </div>
-    <div id = "details" align='center'>
-    </div>
+	<div class = "auth">
+		<span class = "headerauth"><u>AUTHORS</u></span>
+	</div>
 
-    <svg id="container" height="800" width="800" transform="translate(550,20)">
-        <g id="body" transform="translate(0,0)"></g>
-    </svg>
-
-    <svg id = "legend" height="150" width="400" transform="translate(230,-580)">
-        <text x = "0" y = "40" fill = "red">0 &emsp; 20&emsp;&nbsp;&nbsp;40&emsp;&nbsp;&nbsp;60&emsp;&nbsp;&nbsp;80&emsp;100</text>
-        <text x = 40 y = "70" style = "font-family: sans-serif;">H.D. Index Legend </text>
-      <defs>
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:#38220F;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#EDA05A;stop-opacity:1" />
-        </linearGradient>
-      </defs>
-      <rect id = "legendrect" height = 20 width = 200 fill = "url(#grad1)">
-      <!-- <ellipse cx="200" cy="70" rx="85" ry="55" fill="url(#grad1)" /> -->
-    </svg>
+	<div id = "authors" align="center">
+		SHUBHI RUSTAGI - 17UCS158<br>ARNAB SINHA &emsp;&emsp;- 17UCS034<br>DHRUV GUPTA&emsp;&emsp; - 17UCS052
+	</div>
 
 </body>
-<script src = "d3.js"></script>
-<script>
-    let body = d3.select("#body")
-    let container = d3.select("#container")
-
-    var i;
-    var prop;
-
-    function Home(){
-        window.open('front.html',"_self")
-    }
-
-    function showHDI2011(){
-        body.selectAll("path").remove()
-        i = 1;
-        prop = "Human Developement Index for 2011";
-
-        Promise.all([
-            d3.csv("dataset.csv"),
-            d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
-        ]).then(showData)
-    }
-
-    function showHDI2012(){
-        body.selectAll("path").remove()
-        i = 2;
-        prop = "Human Developement Index for 2012";
-        Promise.all([
-            d3.csv("dataset.csv"),
-            d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
-        ]).then(showData)
-    }
-
-    function showHDI2013(){
-        body.selectAll("path").remove()
-        i = 3;
-        prop = "Human Developement Index for 2013";
-        Promise.all([
-            d3.csv("dataset.csv"),
-            d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
-        ]).then(showData)
-    }
-
-    function showHDI2014(){
-        body.selectAll("path").remove()
-        i = 4;
-        prop = "Human Developement Index for 2014";
-        Promise.all([
-            d3.csv("dataset.csv"),
-            d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
-        ]).then(showData)
-    }
-
-    function showHDI2015(){
-        body.selectAll("path").remove()
-        prop = "Human Developement Index for 2015";
-        i = 5;
-        Promise.all([
-            d3.csv("dataset.csv"),
-            d3.json("countries.geo.json"),
-            d3.json("human1.json"),
-            d3.json("humanindia1.json"),
-            d3.json("humanindia2.json"),
-            d3.json("humanindia3.json")
-        ]).then(showData)
-    }
-
-    function showData(datasources) {
-        let mapInfo = datasources[1]
-        let data = datasources[2]
-        
-        // console.log(data.fields)
-
-        let dataIndex = {};
-        for (let c of data.data) {
-            // console.log(c);
-            let country = c[0]
-            dataIndex[country] = +c[i];
-        }
-
-        console.log(dataIndex);
-
-        mapInfo.features = mapInfo.features.map(d => {
-            let country = d.properties.name;
-            let magnitude = dataIndex[country];
-            d.properties.Magnitude = magnitude*100;
-            return d;
-        })
-
-        let maxEarthquake = d3.max(mapInfo.features, 
-            d => d.properties.Magnitude);
-
-        console.log(maxEarthquake);
-
-        let cScale = d3.scalePow()
-            .exponent(4)
-            .domain([0, maxEarthquake])
-            .range(['#38220F','#EDA05A'])
-            // .range(["white","red"])
-
-        let bodyHeight = 800
-        let bodyWidth = 800
-
-        var projection = 
-            d3.geoMercator()
-                .scale(90)
-                .translate([400,400])
-
-
-        var path = d3.geoPath()
-            .projection(projection);
-
-        body.selectAll("path").data(mapInfo.features)
-            .enter().append("path")
-            .attr("d", d => path(d))
-            .attr("stroke", "black")
-            .attr("fill", 
-                d => d.properties.Magnitude ?
-                cScale(d.properties.Magnitude) :
-                "white")
-            .on("mouseover", d => {
-                d3.select("#details").html("Country: "+ d.properties.name + "<br>" + prop + ": " + d.properties.Magnitude)
-                // var mouse = d3.mouse(this);
-            })
-
-
-        // d3.select("#container")
-        //   .append("svg")
-        //   .attr("class", "legend");
-
-        // var legend = d3.legend
-        //   .color()
-        //   .shapeHeight(10)
-        //   .shapeWidth(50)
-        //   .shapePadding(0)
-        //   .labelOffset(5)
-        //   .labelFormat(d3.format("%"))
-        //   .orient("horizontal")
-        //   .labelAlign("start")
-        //   .scale(cScale);
-
-        // d3.select(".legend").call(legend);
-
-        // console.log(legend)
-
-    }
-
-
-</script>
-
 </html>
