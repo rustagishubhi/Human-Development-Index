@@ -1,0 +1,240 @@
+<html>
+
+<head>
+    <style>
+        body{
+            background-color: #E0EFB2;
+        }
+        .line {
+            fill: none;
+        }
+
+        #container{
+            border: 2px solid black;
+            z-index: 1000;
+            transform: translate(400px,0px);
+            margin-top: 20px;
+        }
+
+        .legend{
+            transform: translate(1200px,-500px);
+            /*border: 1px solid black;*/
+            width: 300px;
+            height: 700px;
+            list-style: none;
+        }
+
+        .legend li{ float: left; margin-right: 10px; }
+        .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+
+        .legend .India{
+            background-color: red;
+        }
+        .legend .World{
+            background-color: blue;
+        }
+        #ranks{
+            text-align: center;
+            transform: translate(1200px,-500px);
+            font-size: 20px;
+            border: 1px solid black;
+            margin-bottom: 40px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            width: 300px;
+            height: 25px;
+        }
+
+        .button{
+         transform: translate(770px, 0px);
+          border: none;
+          color: black
+          background-color: yellow;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+
+        .button1{
+            width: 250px;
+            border: 2px solid black;    
+        }
+
+    </style>
+</head>
+<body>
+
+    <div>
+        <button class = "button button1" onclick="Home()">HOME</button>
+    </div>
+
+    <div align="center">
+        <p>
+            <u style="font-size: 30px">HUMAN DEVELOPMENT INDEX OF INDIA v/s WORLD <br> FROM 1980 to 2014</u>
+        </p>
+    </div>
+
+    </div>
+
+    <svg id="container" height="500" width="700">
+        <g id="body" transform="translate(110,50)"></g>
+        <g id="xAxis"></g>
+        <g id="yAxis"></g>
+    </svg>
+
+    <div align="center" style="transform: translate(430px,-500px);">
+      <b>HOVER OVER ANY POINT TO SEE RANK BELOW</b>
+    </div>
+    <div id = "ranks">
+    </div>
+
+    <div class = "legend">
+        <p align="center" style="font-family: cursive;">COLOR LEGEND</p>
+        <ul id = "itemlist">
+            <li><span class="India"></span> India</li><br>
+            <li><span class="World"></span> World</li>
+        </ul>
+    </div>
+
+</body>
+<script src="d3.js"></script>
+<script>
+    let body = d3.select("#body")
+    let container = d3.select("#container")
+    d3.csv("data_indiaVworld.csv").then(showData)
+
+    function Home(){
+      window.open('front.html',"_self")
+    }
+
+    function showData(data) {
+        let bodyHeight = 300
+        let bodyWidth = 500
+
+        console.log(data);
+
+        var arr = []
+
+        for(var c in data){
+            if(data[c].HDI_World!="NA"){
+                arr.push({
+                    date: new Date(data[c].Year, 0, 1),
+                    HDI_India: data[c].HDI_India,
+                    HDI_World: data[c].HDI_World
+                })
+            }
+        }
+
+        arr.pop()        
+
+        // console.log(arr);
+
+        let yScale = d3.scaleLinear()
+            .range([bodyHeight, 0])
+            .domain([0, 1]);
+
+        body.append("g")    
+            .call(d3.axisLeft(yScale));
+
+        var minDate = new Date(1978,0,1)
+        var maxDate = new Date(2015,0,1)
+
+        let xScale = d3.scaleTime()
+            .domain([minDate,maxDate])
+            .range([0, bodyWidth]);
+
+        body.append("g")
+            .attr("transform", "translate(0," + bodyHeight + ")")
+            .call(d3.axisBottom(xScale)
+                .tickFormat(d3.timeFormat("%Y")))
+
+        let indialine = d3.line()
+            .x(d => xScale(d.date))
+            .y(d => yScale(d.HDI_India))
+            .defined(d => !!d.HDI_India);
+
+        // console.log(data);
+        let worldline = d3.line()
+            .x(d => xScale(d.date))
+            .y(d => yScale(d.HDI_World))
+            .defined(d => !!d.HDI_World);
+
+        body.append("path")
+            .datum(arr)
+            .attr("d", worldline)
+            .attr("class", "line")
+            .attr("stroke", "blue")
+            .attr("stroke-width", "2")
+            .attr("fill", "none")
+
+        body.append("path")
+            .datum(arr)
+            .attr("d", indialine)
+            .attr("class", "line")
+            .attr("stroke", "red")
+            .attr("stroke-width", "2")
+            .attr("fill", "none")
+
+        body.selectAll("myCircles")
+          .data(arr)
+          .enter()
+          .append("circle")
+            .attr("fill", function(d) { return "blue" })
+            .attr("stroke", "none")
+            .attr("cx", function(d) { return xScale(d.date) })
+            .attr("cy", function(d) { return yScale(d.HDI_World) })
+            .attr("r", 3)
+            .on("mouseover", d => {
+                d3.select("#ranks").html("HDI of the World" + " is : " + d.HDI_World)});
+            
+
+        body.selectAll("outlines")
+          .data(arr)
+          .enter()
+          .append("circle")
+            .attr("fill", function(d) { return "red" })
+            .attr("stroke", "none")
+            .attr("cx", function(d) { return xScale(d.date) })
+            .attr("cy", function(d) { return yScale(d.HDI_India) })
+            .attr("r", 3)
+            .on("mouseover", d => {
+                d3.select("#ranks").html("HDI of India" + " is : " + d.HDI_India)});
+
+        body.selectAll("outlines")
+          .data(arr)
+          .enter()
+          .append("circle")
+            .attr("fill", "none")
+            .attr("border","1px")
+            .attr("stroke", "gray")
+            .attr("stroke-width","2px")
+            .attr("cx", function(d) { return xScale(d.date) })
+            .attr("cy", function(d) { return yScale(d.HDI_India) })
+            .attr("r", 5)
+            .on("mouseover", d => {
+                d3.select("#ranks").html("HDI of the World" + " is : " + d.HDI_India)});
+
+        body.selectAll("outlines")
+          .data(arr)
+          .enter()
+          .append("circle")
+            .attr("fill", "none")
+            .attr("border","1px")
+            .attr("stroke", "gray")
+            .attr("stroke-width","2px")
+            .attr("cx", function(d) { return xScale(d.date) })
+            .attr("cy", function(d) { return yScale(d.HDI_World) })
+            .attr("r", 5)
+            .on("mouseover", d => {
+                d3.select("#ranks").html("HDI of the World" + " is : " + d.HDI_World)});
+
+    }
+
+
+</script>
+
+</html>
